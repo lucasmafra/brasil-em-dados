@@ -2,10 +2,6 @@ export const typeDefs = /* GraphQL */ `type AggregateCategory {
   count: Int!
 }
 
-type AggregatePoint {
-  count: Int!
-}
-
 type AggregateStatistic {
   count: Int!
 }
@@ -15,9 +11,10 @@ type BatchPayload {
 }
 
 type Category {
-  id: ID!
+  slug: String!
   title: String!
   description: String
+  statistics(where: StatisticWhereInput, orderBy: StatisticOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Statistic!]
 }
 
 type CategoryConnection {
@@ -27,13 +24,21 @@ type CategoryConnection {
 }
 
 input CategoryCreateInput {
+  slug: String!
   title: String!
   description: String
+  statistics: StatisticCreateManyWithoutCategoryInput
 }
 
-input CategoryCreateOneInput {
-  create: CategoryCreateInput
+input CategoryCreateOneWithoutStatisticsInput {
+  create: CategoryCreateWithoutStatisticsInput
   connect: CategoryWhereUniqueInput
+}
+
+input CategoryCreateWithoutStatisticsInput {
+  slug: String!
+  title: String!
+  description: String
 }
 
 type CategoryEdge {
@@ -42,12 +47,14 @@ type CategoryEdge {
 }
 
 enum CategoryOrderByInput {
-  id_ASC
-  id_DESC
+  slug_ASC
+  slug_DESC
   title_ASC
   title_DESC
   description_ASC
   description_DESC
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -55,7 +62,7 @@ enum CategoryOrderByInput {
 }
 
 type CategoryPreviousValues {
-  id: ID!
+  slug: String!
   title: String!
   description: String
 }
@@ -78,43 +85,46 @@ input CategorySubscriptionWhereInput {
   NOT: [CategorySubscriptionWhereInput!]
 }
 
-input CategoryUpdateDataInput {
-  title: String
-  description: String
-}
-
 input CategoryUpdateInput {
+  slug: String
   title: String
   description: String
+  statistics: StatisticUpdateManyWithoutCategoryInput
 }
 
-input CategoryUpdateOneRequiredInput {
-  create: CategoryCreateInput
-  update: CategoryUpdateDataInput
-  upsert: CategoryUpsertNestedInput
+input CategoryUpdateOneRequiredWithoutStatisticsInput {
+  create: CategoryCreateWithoutStatisticsInput
+  update: CategoryUpdateWithoutStatisticsDataInput
+  upsert: CategoryUpsertWithoutStatisticsInput
   connect: CategoryWhereUniqueInput
 }
 
-input CategoryUpsertNestedInput {
-  update: CategoryUpdateDataInput!
-  create: CategoryCreateInput!
+input CategoryUpdateWithoutStatisticsDataInput {
+  slug: String
+  title: String
+  description: String
+}
+
+input CategoryUpsertWithoutStatisticsInput {
+  update: CategoryUpdateWithoutStatisticsDataInput!
+  create: CategoryCreateWithoutStatisticsInput!
 }
 
 input CategoryWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
+  slug: String
+  slug_not: String
+  slug_in: [String!]
+  slug_not_in: [String!]
+  slug_lt: String
+  slug_lte: String
+  slug_gt: String
+  slug_gte: String
+  slug_contains: String
+  slug_not_contains: String
+  slug_starts_with: String
+  slug_not_starts_with: String
+  slug_ends_with: String
+  slug_not_ends_with: String
   title: String
   title_not: String
   title_in: [String!]
@@ -143,13 +153,16 @@ input CategoryWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  statistics_every: StatisticWhereInput
+  statistics_some: StatisticWhereInput
+  statistics_none: StatisticWhereInput
   AND: [CategoryWhereInput!]
   OR: [CategoryWhereInput!]
   NOT: [CategoryWhereInput!]
 }
 
 input CategoryWhereUniqueInput {
-  id: ID
+  slug: String
 }
 
 scalar Long
@@ -161,9 +174,6 @@ type Mutation {
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteManyCategories(where: CategoryWhereInput): BatchPayload!
-  createPoint(data: PointCreateInput!): Point!
-  updateManyPoints(data: PointUpdateInput!, where: PointWhereInput): BatchPayload!
-  deleteManyPoints(where: PointWhereInput): BatchPayload!
   createStatistic(data: StatisticCreateInput!): Statistic!
   updateStatistic(data: StatisticUpdateInput!, where: StatisticWhereUniqueInput!): Statistic
   updateManyStatistics(data: StatisticUpdateInput!, where: StatisticWhereInput): BatchPayload!
@@ -189,104 +199,10 @@ type PageInfo {
   endCursor: String
 }
 
-type Point {
-  xValue: Float!
-  yValue: Float!
-}
-
-type PointConnection {
-  pageInfo: PageInfo!
-  edges: [PointEdge]!
-  aggregate: AggregatePoint!
-}
-
-input PointCreateInput {
-  xValue: Float!
-  yValue: Float!
-}
-
-input PointCreateManyInput {
-  create: [PointCreateInput!]
-}
-
-type PointEdge {
-  node: Point!
-  cursor: String!
-}
-
-enum PointOrderByInput {
-  xValue_ASC
-  xValue_DESC
-  yValue_ASC
-  yValue_DESC
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type PointPreviousValues {
-  xValue: Float!
-  yValue: Float!
-}
-
-type PointSubscriptionPayload {
-  mutation: MutationType!
-  node: Point
-  updatedFields: [String!]
-  previousValues: PointPreviousValues
-}
-
-input PointSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: PointWhereInput
-  AND: [PointSubscriptionWhereInput!]
-  OR: [PointSubscriptionWhereInput!]
-  NOT: [PointSubscriptionWhereInput!]
-}
-
-input PointUpdateInput {
-  xValue: Float
-  yValue: Float
-}
-
-input PointUpdateManyInput {
-  create: [PointCreateInput!]
-}
-
-input PointWhereInput {
-  xValue: Float
-  xValue_not: Float
-  xValue_in: [Float!]
-  xValue_not_in: [Float!]
-  xValue_lt: Float
-  xValue_lte: Float
-  xValue_gt: Float
-  xValue_gte: Float
-  yValue: Float
-  yValue_not: Float
-  yValue_in: [Float!]
-  yValue_not_in: [Float!]
-  yValue_lt: Float
-  yValue_lte: Float
-  yValue_gt: Float
-  yValue_gte: Float
-  AND: [PointWhereInput!]
-  OR: [PointWhereInput!]
-  NOT: [PointWhereInput!]
-}
-
 type Query {
   category(where: CategoryWhereUniqueInput!): Category
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
-  points(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Point]!
-  pointsConnection(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PointConnection!
   statistic(where: StatisticWhereUniqueInput!): Statistic
   statistics(where: StatisticWhereInput, orderBy: StatisticOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Statistic]!
   statisticsConnection(where: StatisticWhereInput, orderBy: StatisticOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StatisticConnection!
@@ -294,16 +210,17 @@ type Query {
 }
 
 type Statistic {
-  id: ID!
   slug: String!
   shortTitle: String!
   title: String!
   description: String!
   xLabel: String!
   yLabel: String!
+  xHeader: String!
+  yHeader: String!
   source: String!
+  dataURL: String!
   category: Category!
-  points(where: PointWhereInput, orderBy: PointOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Point!]
 }
 
 type StatisticConnection {
@@ -319,9 +236,29 @@ input StatisticCreateInput {
   description: String!
   xLabel: String!
   yLabel: String!
+  xHeader: String!
+  yHeader: String!
   source: String!
-  category: CategoryCreateOneInput!
-  points: PointCreateManyInput
+  dataURL: String!
+  category: CategoryCreateOneWithoutStatisticsInput!
+}
+
+input StatisticCreateManyWithoutCategoryInput {
+  create: [StatisticCreateWithoutCategoryInput!]
+  connect: [StatisticWhereUniqueInput!]
+}
+
+input StatisticCreateWithoutCategoryInput {
+  slug: String!
+  shortTitle: String!
+  title: String!
+  description: String!
+  xLabel: String!
+  yLabel: String!
+  xHeader: String!
+  yHeader: String!
+  source: String!
+  dataURL: String!
 }
 
 type StatisticEdge {
@@ -330,8 +267,6 @@ type StatisticEdge {
 }
 
 enum StatisticOrderByInput {
-  id_ASC
-  id_DESC
   slug_ASC
   slug_DESC
   shortTitle_ASC
@@ -344,8 +279,16 @@ enum StatisticOrderByInput {
   xLabel_DESC
   yLabel_ASC
   yLabel_DESC
+  xHeader_ASC
+  xHeader_DESC
+  yHeader_ASC
+  yHeader_DESC
   source_ASC
   source_DESC
+  dataURL_ASC
+  dataURL_DESC
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -353,14 +296,16 @@ enum StatisticOrderByInput {
 }
 
 type StatisticPreviousValues {
-  id: ID!
   slug: String!
   shortTitle: String!
   title: String!
   description: String!
   xLabel: String!
   yLabel: String!
+  xHeader: String!
+  yHeader: String!
   source: String!
+  dataURL: String!
 }
 
 type StatisticSubscriptionPayload {
@@ -388,26 +333,47 @@ input StatisticUpdateInput {
   description: String
   xLabel: String
   yLabel: String
+  xHeader: String
+  yHeader: String
   source: String
-  category: CategoryUpdateOneRequiredInput
-  points: PointUpdateManyInput
+  dataURL: String
+  category: CategoryUpdateOneRequiredWithoutStatisticsInput
+}
+
+input StatisticUpdateManyWithoutCategoryInput {
+  create: [StatisticCreateWithoutCategoryInput!]
+  delete: [StatisticWhereUniqueInput!]
+  connect: [StatisticWhereUniqueInput!]
+  disconnect: [StatisticWhereUniqueInput!]
+  update: [StatisticUpdateWithWhereUniqueWithoutCategoryInput!]
+  upsert: [StatisticUpsertWithWhereUniqueWithoutCategoryInput!]
+}
+
+input StatisticUpdateWithoutCategoryDataInput {
+  slug: String
+  shortTitle: String
+  title: String
+  description: String
+  xLabel: String
+  yLabel: String
+  xHeader: String
+  yHeader: String
+  source: String
+  dataURL: String
+}
+
+input StatisticUpdateWithWhereUniqueWithoutCategoryInput {
+  where: StatisticWhereUniqueInput!
+  data: StatisticUpdateWithoutCategoryDataInput!
+}
+
+input StatisticUpsertWithWhereUniqueWithoutCategoryInput {
+  where: StatisticWhereUniqueInput!
+  update: StatisticUpdateWithoutCategoryDataInput!
+  create: StatisticCreateWithoutCategoryInput!
 }
 
 input StatisticWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
   slug: String
   slug_not: String
   slug_in: [String!]
@@ -492,6 +458,34 @@ input StatisticWhereInput {
   yLabel_not_starts_with: String
   yLabel_ends_with: String
   yLabel_not_ends_with: String
+  xHeader: String
+  xHeader_not: String
+  xHeader_in: [String!]
+  xHeader_not_in: [String!]
+  xHeader_lt: String
+  xHeader_lte: String
+  xHeader_gt: String
+  xHeader_gte: String
+  xHeader_contains: String
+  xHeader_not_contains: String
+  xHeader_starts_with: String
+  xHeader_not_starts_with: String
+  xHeader_ends_with: String
+  xHeader_not_ends_with: String
+  yHeader: String
+  yHeader_not: String
+  yHeader_in: [String!]
+  yHeader_not_in: [String!]
+  yHeader_lt: String
+  yHeader_lte: String
+  yHeader_gt: String
+  yHeader_gte: String
+  yHeader_contains: String
+  yHeader_not_contains: String
+  yHeader_starts_with: String
+  yHeader_not_starts_with: String
+  yHeader_ends_with: String
+  yHeader_not_ends_with: String
   source: String
   source_not: String
   source_in: [String!]
@@ -506,22 +500,32 @@ input StatisticWhereInput {
   source_not_starts_with: String
   source_ends_with: String
   source_not_ends_with: String
+  dataURL: String
+  dataURL_not: String
+  dataURL_in: [String!]
+  dataURL_not_in: [String!]
+  dataURL_lt: String
+  dataURL_lte: String
+  dataURL_gt: String
+  dataURL_gte: String
+  dataURL_contains: String
+  dataURL_not_contains: String
+  dataURL_starts_with: String
+  dataURL_not_starts_with: String
+  dataURL_ends_with: String
+  dataURL_not_ends_with: String
   category: CategoryWhereInput
-  points_every: PointWhereInput
-  points_some: PointWhereInput
-  points_none: PointWhereInput
   AND: [StatisticWhereInput!]
   OR: [StatisticWhereInput!]
   NOT: [StatisticWhereInput!]
 }
 
 input StatisticWhereUniqueInput {
-  id: ID
+  slug: String
 }
 
 type Subscription {
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
-  point(where: PointSubscriptionWhereInput): PointSubscriptionPayload
   statistic(where: StatisticSubscriptionWhereInput): StatisticSubscriptionPayload
 }
 `

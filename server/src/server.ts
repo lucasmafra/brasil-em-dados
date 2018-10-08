@@ -2,7 +2,7 @@ import { GraphQLServer } from 'graphql-yoga'
 import resolvers from './api/resolvers'
 import { formatError } from './api/error'
 import { Context } from './context'
-import { prisma } from './database/generated/prisma'
+import { repository } from './repository/repository'
 
 export class Server {
   
@@ -33,7 +33,7 @@ export class Server {
   private static runningInstance: any = null
   
   private static server = new GraphQLServer({
-    context: () => new Context(prisma),
+    context: () => new Context(repository),
     resolvers: resolvers as any,
     typeDefs: './src/api/schema.graphql',
   })

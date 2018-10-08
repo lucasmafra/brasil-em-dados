@@ -1,23 +1,20 @@
 type Statistic {
-    id: ID! @unique
-    slug: String!
+    slug: String! @unique
     shortTitle: String!
     title: String!
     description: String!
     xLabel: String!
     yLabel: String!
+    xHeader: String!
+    yHeader: String!
     source: String!
+    dataURL: String!
     category: Category!
-    points: [Point!]!
-}
-
-type Point {
-    xValue: Float!
-    yValue: Float!
 }
 
 type Category {
-    id: ID! @unique
+    slug: String! @unique
     title: String!
     description: String
+    statistics: [Statistic!]!
 }

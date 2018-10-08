@@ -1,5 +1,5 @@
-import { Prisma } from './database/generated/prisma'
+import { Repository } from './repository/repository'
 
 export class Context {
-  constructor(public repository: Prisma) { }
+  constructor(public repository: Repository) { }
 }
