@@ -1,0 +1,21 @@
+{
+  "name": "brasil-em-dados",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "nodemon -L -x ts-node -e ts,graphql src/main.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:deploy": "cd src/database && prisma deploy"
+  },
+  "author": "Lucas Mafra",
+  "license": "ISC",
+  "dependencies": {
+    "graphql-yoga": "^1.16.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4",
+    "prisma": "^1.17.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.1"
+  }
+}

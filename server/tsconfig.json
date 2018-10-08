@@ -5,7 +5,8 @@
     "strict": true,
     "outDir": "dist",
     "sourceMap": true,
-    "lib": ["esnext.asynciterable", "es6"]
+    "lib": ["es2015", "esnext.asynciterable"],
+    "noImplicitAny": false
   },
   "include": [
     "src/**/*"
