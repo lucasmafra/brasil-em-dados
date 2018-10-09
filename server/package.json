@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon -L -x ts-node -e ts,graphql src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:deploy": "cd src/database && prisma deploy"
+    "db:deploy": "cd src/repository/database && prisma deploy",
+    "db:seed": "ts-node scripts/db-seed.ts"
   },
   "author": "Lucas Mafra",
   "license": "ISC",

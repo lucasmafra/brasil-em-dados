@@ -9,7 +9,8 @@
     "noImplicitAny": false
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "scripts/**/*"
   ],
   "exclude": [
     "node_modules",
