@@ -21,8 +21,13 @@ export default {
     }
   },
   Statistic: {
-    points(parent, args, context: Context) {
-      return context.repository.points({where: {statistic: parent}})
+    async points(parent, args, context: Context) {
+      try {
+        const points = await context.repository.points({where: {statistic: parent}})
+        return points
+      } catch (err) {
+        return null
+      }
     }
   }
 }

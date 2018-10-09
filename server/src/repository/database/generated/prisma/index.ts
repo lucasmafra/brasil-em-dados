@@ -151,6 +151,8 @@ export type StatisticOrderByInput =
   | "title_DESC"
   | "description_ASC"
   | "description_DESC"
+  | "dataAvailable_ASC"
+  | "dataAvailable_DESC"
   | "xLabel_ASC"
   | "xLabel_DESC"
   | "yLabel_ASC"
@@ -191,6 +193,7 @@ export interface StatisticCreateWithoutCategoryInput {
   shortTitle: String;
   title: String;
   description: String;
+  dataAvailable: Boolean;
   xLabel: String;
   yLabel: String;
   xHeader: String;
@@ -269,9 +272,120 @@ export interface CategoryWhereInput {
   NOT?: CategoryWhereInput[] | CategoryWhereInput;
 }
 
+export interface CategoryCreateWithoutStatisticsInput {
+  slug: String;
+  title: String;
+  description?: String;
+}
+
+export interface StatisticUpdateWithoutCategoryDataInput {
+  slug?: String;
+  shortTitle?: String;
+  title?: String;
+  description?: String;
+  dataAvailable?: Boolean;
+  xLabel?: String;
+  yLabel?: String;
+  xHeader?: String;
+  yHeader?: String;
+  source?: String;
+  dataURL?: String;
+}
+
 export interface CategoryCreateOneWithoutStatisticsInput {
   create?: CategoryCreateWithoutStatisticsInput;
   connect?: CategoryWhereUniqueInput;
+}
+
+export interface StatisticUpdateWithWhereUniqueWithoutCategoryInput {
+  where: StatisticWhereUniqueInput;
+  data: StatisticUpdateWithoutCategoryDataInput;
+}
+
+export interface StatisticSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: StatisticWhereInput;
+  AND?: StatisticSubscriptionWhereInput[] | StatisticSubscriptionWhereInput;
+  OR?: StatisticSubscriptionWhereInput[] | StatisticSubscriptionWhereInput;
+  NOT?: StatisticSubscriptionWhereInput[] | StatisticSubscriptionWhereInput;
+}
+
+export interface CategoryUpsertWithoutStatisticsInput {
+  update: CategoryUpdateWithoutStatisticsDataInput;
+  create: CategoryCreateWithoutStatisticsInput;
+}
+
+export interface CategoryCreateInput {
+  slug: String;
+  title: String;
+  description?: String;
+  statistics?: StatisticCreateManyWithoutCategoryInput;
+}
+
+export type StatisticWhereUniqueInput = AtLeastOne<{
+  slug: String;
+}>;
+
+export interface StatisticUpsertWithWhereUniqueWithoutCategoryInput {
+  where: StatisticWhereUniqueInput;
+  update: StatisticUpdateWithoutCategoryDataInput;
+  create: StatisticCreateWithoutCategoryInput;
+}
+
+export interface CategoryUpdateInput {
+  slug?: String;
+  title?: String;
+  description?: String;
+  statistics?: StatisticUpdateManyWithoutCategoryInput;
+}
+
+export interface StatisticCreateInput {
+  slug: String;
+  shortTitle: String;
+  title: String;
+  description: String;
+  dataAvailable: Boolean;
+  xLabel: String;
+  yLabel: String;
+  xHeader: String;
+  yHeader: String;
+  source: String;
+  dataURL: String;
+  category: CategoryCreateOneWithoutStatisticsInput;
+}
+
+export interface StatisticCreateManyWithoutCategoryInput {
+  create?:
+    | StatisticCreateWithoutCategoryInput[]
+    | StatisticCreateWithoutCategoryInput;
+  connect?: StatisticWhereUniqueInput[] | StatisticWhereUniqueInput;
+}
+
+export interface CategoryUpdateOneRequiredWithoutStatisticsInput {
+  create?: CategoryCreateWithoutStatisticsInput;
+  update?: CategoryUpdateWithoutStatisticsDataInput;
+  upsert?: CategoryUpsertWithoutStatisticsInput;
+  connect?: CategoryWhereUniqueInput;
+}
+
+export interface CategoryUpdateWithoutStatisticsDataInput {
+  slug?: String;
+  title?: String;
+  description?: String;
+}
+
+export interface CategorySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: CategoryWhereInput;
+  AND?: CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput;
+  OR?: CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput;
+  NOT?: CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput;
 }
 
 export interface StatisticWhereInput {
@@ -331,6 +445,8 @@ export interface StatisticWhereInput {
   description_not_starts_with?: String;
   description_ends_with?: String;
   description_not_ends_with?: String;
+  dataAvailable?: Boolean;
+  dataAvailable_not?: Boolean;
   xLabel?: String;
   xLabel_not?: String;
   xLabel_in?: String[] | String;
@@ -421,91 +537,12 @@ export interface StatisticWhereInput {
   NOT?: StatisticWhereInput[] | StatisticWhereInput;
 }
 
-export interface StatisticCreateInput {
-  slug: String;
-  shortTitle: String;
-  title: String;
-  description: String;
-  xLabel: String;
-  yLabel: String;
-  xHeader: String;
-  yHeader: String;
-  source: String;
-  dataURL: String;
-  category: CategoryCreateOneWithoutStatisticsInput;
-}
-
-export interface StatisticUpdateWithWhereUniqueWithoutCategoryInput {
-  where: StatisticWhereUniqueInput;
-  data: StatisticUpdateWithoutCategoryDataInput;
-}
-
-export interface CategorySubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: CategoryWhereInput;
-  AND?: CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput;
-  OR?: CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput;
-  NOT?: CategorySubscriptionWhereInput[] | CategorySubscriptionWhereInput;
-}
-
-export interface CategoryUpdateWithoutStatisticsDataInput {
-  slug?: String;
-  title?: String;
-  description?: String;
-}
-
-export interface CategoryCreateInput {
-  slug: String;
-  title: String;
-  description?: String;
-  statistics?: StatisticCreateManyWithoutCategoryInput;
-}
-
-export type StatisticWhereUniqueInput = AtLeastOne<{
-  slug: String;
-}>;
-
-export interface StatisticUpdateWithoutCategoryDataInput {
-  slug?: String;
-  shortTitle?: String;
-  title?: String;
-  description?: String;
-  xLabel?: String;
-  yLabel?: String;
-  xHeader?: String;
-  yHeader?: String;
-  source?: String;
-  dataURL?: String;
-}
-
-export interface CategoryUpdateInput {
-  slug?: String;
-  title?: String;
-  description?: String;
-  statistics?: StatisticUpdateManyWithoutCategoryInput;
-}
-
-export interface StatisticUpsertWithWhereUniqueWithoutCategoryInput {
-  where: StatisticWhereUniqueInput;
-  update: StatisticUpdateWithoutCategoryDataInput;
-  create: StatisticCreateWithoutCategoryInput;
-}
-
-export interface StatisticCreateManyWithoutCategoryInput {
-  create?:
-    | StatisticCreateWithoutCategoryInput[]
-    | StatisticCreateWithoutCategoryInput;
-  connect?: StatisticWhereUniqueInput[] | StatisticWhereUniqueInput;
-}
-
 export interface StatisticUpdateInput {
   slug?: String;
   shortTitle?: String;
   title?: String;
   description?: String;
+  dataAvailable?: Boolean;
   xLabel?: String;
   yLabel?: String;
   xHeader?: String;
@@ -513,35 +550,6 @@ export interface StatisticUpdateInput {
   source?: String;
   dataURL?: String;
   category?: CategoryUpdateOneRequiredWithoutStatisticsInput;
-}
-
-export interface CategoryUpdateOneRequiredWithoutStatisticsInput {
-  create?: CategoryCreateWithoutStatisticsInput;
-  update?: CategoryUpdateWithoutStatisticsDataInput;
-  upsert?: CategoryUpsertWithoutStatisticsInput;
-  connect?: CategoryWhereUniqueInput;
-}
-
-export interface CategoryUpsertWithoutStatisticsInput {
-  update: CategoryUpdateWithoutStatisticsDataInput;
-  create: CategoryCreateWithoutStatisticsInput;
-}
-
-export interface StatisticSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: StatisticWhereInput;
-  AND?: StatisticSubscriptionWhereInput[] | StatisticSubscriptionWhereInput;
-  OR?: StatisticSubscriptionWhereInput[] | StatisticSubscriptionWhereInput;
-  NOT?: StatisticSubscriptionWhereInput[] | StatisticSubscriptionWhereInput;
-}
-
-export interface CategoryCreateWithoutStatisticsInput {
-  slug: String;
-  title: String;
-  description?: String;
 }
 
 export interface NodeNode {
@@ -553,6 +561,7 @@ export interface StatisticPreviousValuesNode {
   shortTitle: String;
   title: String;
   description: String;
+  dataAvailable: Boolean;
   xLabel: String;
   yLabel: String;
   xHeader: String;
@@ -568,6 +577,7 @@ export interface StatisticPreviousValues
   shortTitle: () => Promise<String>;
   title: () => Promise<String>;
   description: () => Promise<String>;
+  dataAvailable: () => Promise<Boolean>;
   xLabel: () => Promise<String>;
   yLabel: () => Promise<String>;
   xHeader: () => Promise<String>;
@@ -583,12 +593,75 @@ export interface StatisticPreviousValuesSubscription
   shortTitle: () => Promise<AsyncIterator<String>>;
   title: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
+  dataAvailable: () => Promise<AsyncIterator<Boolean>>;
   xLabel: () => Promise<AsyncIterator<String>>;
   yLabel: () => Promise<AsyncIterator<String>>;
   xHeader: () => Promise<AsyncIterator<String>>;
   yHeader: () => Promise<AsyncIterator<String>>;
   source: () => Promise<AsyncIterator<String>>;
   dataURL: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCategoryNode {
+  count: Int;
+}
+
+export interface AggregateCategory
+  extends Promise<AggregateCategoryNode>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCategorySubscription
+  extends Promise<AsyncIterator<AggregateCategoryNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface StatisticNode {
+  slug: String;
+  shortTitle: String;
+  title: String;
+  description: String;
+  dataAvailable: Boolean;
+  xLabel: String;
+  yLabel: String;
+  xHeader: String;
+  yHeader: String;
+  source: String;
+  dataURL: String;
+}
+
+export interface Statistic extends Promise<StatisticNode>, Fragmentable {
+  slug: () => Promise<String>;
+  shortTitle: () => Promise<String>;
+  title: () => Promise<String>;
+  description: () => Promise<String>;
+  dataAvailable: () => Promise<Boolean>;
+  xLabel: () => Promise<String>;
+  yLabel: () => Promise<String>;
+  xHeader: () => Promise<String>;
+  yHeader: () => Promise<String>;
+  source: () => Promise<String>;
+  dataURL: () => Promise<String>;
+  category: <T = Category>() => T;
+}
+
+export interface StatisticSubscription
+  extends Promise<AsyncIterator<StatisticNode>>,
+    Fragmentable {
+  slug: () => Promise<AsyncIterator<String>>;
+  shortTitle: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  dataAvailable: () => Promise<AsyncIterator<Boolean>>;
+  xLabel: () => Promise<AsyncIterator<String>>;
+  yLabel: () => Promise<AsyncIterator<String>>;
+  xHeader: () => Promise<AsyncIterator<String>>;
+  yHeader: () => Promise<AsyncIterator<String>>;
+  source: () => Promise<AsyncIterator<String>>;
+  dataURL: () => Promise<AsyncIterator<String>>;
+  category: <T = CategorySubscription>() => T;
 }
 
 export interface CategoryEdgeNode {
@@ -607,63 +680,18 @@ export interface CategoryEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface StatisticNode {
-  slug: String;
-  shortTitle: String;
-  title: String;
-  description: String;
-  xLabel: String;
-  yLabel: String;
-  xHeader: String;
-  yHeader: String;
-  source: String;
-  dataURL: String;
+export interface BatchPayloadNode {
+  count: Long;
 }
 
-export interface Statistic extends Promise<StatisticNode>, Fragmentable {
-  slug: () => Promise<String>;
-  shortTitle: () => Promise<String>;
-  title: () => Promise<String>;
-  description: () => Promise<String>;
-  xLabel: () => Promise<String>;
-  yLabel: () => Promise<String>;
-  xHeader: () => Promise<String>;
-  yHeader: () => Promise<String>;
-  source: () => Promise<String>;
-  dataURL: () => Promise<String>;
-  category: <T = Category>() => T;
+export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
+  count: () => Promise<Long>;
 }
 
-export interface StatisticSubscription
-  extends Promise<AsyncIterator<StatisticNode>>,
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayloadNode>>,
     Fragmentable {
-  slug: () => Promise<AsyncIterator<String>>;
-  shortTitle: () => Promise<AsyncIterator<String>>;
-  title: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
-  xLabel: () => Promise<AsyncIterator<String>>;
-  yLabel: () => Promise<AsyncIterator<String>>;
-  xHeader: () => Promise<AsyncIterator<String>>;
-  yHeader: () => Promise<AsyncIterator<String>>;
-  source: () => Promise<AsyncIterator<String>>;
-  dataURL: () => Promise<AsyncIterator<String>>;
-  category: <T = CategorySubscription>() => T;
-}
-
-export interface AggregateCategoryNode {
-  count: Int;
-}
-
-export interface AggregateCategory
-  extends Promise<AggregateCategoryNode>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCategorySubscription
-  extends Promise<AsyncIterator<AggregateCategoryNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface CategorySubscriptionPayloadNode {
@@ -687,20 +715,6 @@ export interface CategorySubscriptionPayloadSubscription
   node: <T = CategorySubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
   previousValues: <T = CategoryPreviousValuesSubscription>() => T;
-}
-
-export interface BatchPayloadNode {
-  count: Long;
-}
-
-export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayloadNode>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface CategoryNode {
@@ -743,29 +757,6 @@ export interface CategorySubscription
       last?: Int;
     }
   ) => T;
-}
-
-export interface PageInfoNode {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfoNode>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CategoryPreviousValuesNode {
@@ -883,10 +874,28 @@ export interface AggregateStatisticSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
+export interface PageInfoNode {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfo extends Promise<PageInfoNode>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfoNode>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -894,17 +903,22 @@ The `Int` scalar type represents non-fractional signed whole numeric values. Int
 export type Int = number;
 
 /*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
-*/
-export type ID_Input = string | number;
-export type ID_Output = string;
-
-/*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
 
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
+
 export type Long = string;
+
+/*
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+*/
+export type ID_Input = string | number;
+export type ID_Output = string;
 
 /**
  * Type Defs

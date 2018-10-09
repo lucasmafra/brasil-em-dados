@@ -5,6 +5,15 @@ import {Page, Grid, Card, colors, Dimmer} from "tabler-react";
 import C3Chart from "react-c3js";
 import SiteWrapper from "../SiteWrapper.react";
 import './ChartsPage.react.css'
+import {client} from "../repository/repository";
+import {STATISTIC} from "../repository/queries";
+import * as d3 from "d3";
+
+const mapColors = {
+    PT: 'red',
+    PSDB: 'blue',
+    PMDB: 'green'
+}
 
 class ChartsPage extends React.Component {
     state = {
@@ -15,59 +24,135 @@ class ChartsPage extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         if (prevProps.match.params.category !== this.props.match.params.category || prevProps.match.params.statistic !== this.props.match.params.statistic) {
-            this.onRouteChange()
+            this.onRouteChange(this.props.match.params.statistic)
         }
     }
 
     componentDidMount = () => {
-        this.onRouteChange()
+        this.onRouteChange(this.props.match.params.statistic)
     }
 
-    onRouteChange = () => {
-        this.setState({ fetchingData: true, title: this.props.location.state && this.props.location.state.title, statistic: undefined })
-        setTimeout(() => {
-            this.setState({fetchingData: false})
-        }, 1000)
+    onRouteChange = async (slug) => {
+        this.setState({
+            fetchingData: true,
+            title: this.props.location.state && this.props.location.state.title,
+            statistic: undefined
+        })
+        const {data: {statistic}} = await client.query({
+            query: STATISTIC,
+            variables: {slug}
+        })
+        this.setState({fetchingData: false, statistic})
+        d3.select('.c3').insert('div').attr('class', 'legend')
+            .style('display', 'flex')
+            .style('justify-content', 'center')
+            .style('margin-bottom', '20px')
+            .style('margin-top', '-10px')
+            .append('span')
+            .style('font-weight', 600)
+            .html(() => 'Governo vigente')
     }
 
     render = () => {
-        const chart = {
-            title: "PIB - Produto Interno Bruto",
-            data: {
-                columns: [
-                    // each columns data
-                    ["data1", 2, 8, 6, 7, 14, 11],
-                    ["data2", 5, 15, 11, 15, 21, 25],
-                    ["data3", 17, 18, 21, 20, 30, 29],
-                ],
-                type: "line", // default type of chart
-                colors: {
-                    data1: colors.orange,
-                    data2: colors.blue,
-                    data3: colors.green,
+        let chart
+        const {statistic} = this.state
+        if (statistic) {
+            chart = {
+                title: statistic.shortTitle,
+                data: {
+                    xs: {
+                        data1: 'x1',
+                        data2: 'x2',
+                        data3: 'x3',
+                    },
+                    columns: [
+                        ['x1', '2013-01-01', '2013-02-01', '2013-03-01', '2013-04-01', '2013-05-01', '2013-06-01'],
+                        ['x2', '2013-06-01', '2013-07-01', '2013-08-01', '2013-09-01', '2013-10-01', '2013-11-01'],
+                        ['x3', '2013-11-01', '2013-12-01', '2014-01-01', '2014-02-01', '2014-03-01', '2014-04-01'],
+                        ['data1', 30, 200, 100, 400, 150, 250],
+                        ['data2', 250, 340, 200, 500, 250, 350],
+                        ['data3', 350, 500, 450, 700, 600, 500]
+                    ],
+                    names: {
+                        data1: 'PSDB',
+                        data2: 'PT',
+                        data3: 'PMDB'
+                    },
+                    colors: {
+                        data1: 'blue',
+                        data2: 'red',
+                        data3: 'green'
+                    }
                 },
-                names: {
-                    // name of each serie
-                    data1: "PSDB",
-                    data2: "PT",
-                    data3: "PMDB",
+                axis: {
+                    x: {
+                        type: 'timeseries',
+                        tick: {
+                            format: '%m/%Y'
+                        }
+                    },
+                    y: {
+                        label: {
+                            text: 'Produto Interno Bruto (R$ milhões)',
+                            position: 'outer-middle',
+                        }
+                    }
                 },
-            },
-            axis: {
-                x: {
-                    type: "category",
-                    // name of each category
-                    categories: ["2013", "2014", "2015", "2016", "2017", "2018"],
+                grid: {
+                    x: {
+                        lines: [
+                            {
+                                value: '2013-06-01',
+                                text: 'Início do governo Dilma',
+                                class: 'label-5'
+                            },
+                            {
+                                value: '2013-11-01',
+                                text: 'Início do governo Temer',
+                                class: 'label-5'
+                            },
+                        ]
+                    }
+                }
+            }
+        } else {
+            chart = {
+                title: 'PIB',
+                data: {
+                    columns: [// each columns data
+                        ["data1", 2, 8, 6, 7, 14, 11],
+                        ["data2", 5, 15, 11, 15, 21, 25],
+                        ["data3", 17, 18, 21, 20, 30, 29],
+                    ],
+                    type: "line", // default type of chart
+                    colors: {
+                        data1: colors.orange,
+                        data2: colors.blue,
+                        data3: colors.green,
+                    },
+                    names: {
+                        // name of each serie
+                        data1: "PSDB",
+                        data2: "PT",
+                        data3: "PMDB",
+                    },
                 },
-            },
+                axis: {
+                    x: {
+                        type: "category",
+                        // name of each category
+                        categories: ["2013", "2014", "2015", "2016", "2017", "2018"],
+                    },
+                },
+            }
         }
-
         return (
             <SiteWrapper categories={this.props.categories}>
                 <Page.Content>
                     <Grid.Row>
                         <Grid.Col xl={8} lg={8}>
-                            <Card title={this.state.statistic ? this.state.statistic.title : this.state.title }>
+                            <Card
+                                title={this.state.statistic ? this.state.statistic.title : this.state.title}>
                                 <Card.Body>
                                     {
                                         this.state.fetchingData && (
@@ -75,6 +160,7 @@ class ChartsPage extends React.Component {
                                                 <C3Chart
                                                     data={chart.data}
                                                     axis={chart.axis}
+                                                    grid={chart.grid}
                                                     legend={{
                                                         show: true, //hide legend
                                                     }}
@@ -91,6 +177,7 @@ class ChartsPage extends React.Component {
                                             <C3Chart
                                                 data={chart.data}
                                                 axis={chart.axis}
+                                                grid={chart.grid}
                                                 legend={{
                                                     show: true, //hide legend
                                                 }}
@@ -104,7 +191,7 @@ class ChartsPage extends React.Component {
                                 </Card.Body>
                             </Card>
                         </Grid.Col>
-                        <Grid.Col>
+                        <Grid.Col xl={4} lg={4}>
                             <Card title={'Informações'}>
                                 <Card.Body>
                                     {
@@ -127,43 +214,25 @@ class ChartsPage extends React.Component {
                                             <div>
                                                 <Grid.Row>
                                                     <p>
-                                                        <strong>Estatística: </strong>Produto
-                                                        Interno Bruto (PIB)
-                                                        nominal</p>
+                                                        <strong>Estatística: </strong>
+                                                        {this.state.statistic.title}
+                                                    </p>
                                                 </Grid.Row>
                                                 <Grid.Row>
                                                     <p className="statistic-comment">
-                                                        <strong>Comentário: </strong>Produto
-                                                        Interno Bruto (PIB) em
-                                                        valores correntes. As
-                                                        informações sobre as
-                                                        séries do Sistema de
-                                                        Contas Nacionais -
-                                                        referência 2010 estão em
-                                                        conformidade com o novo
-                                                        manual System of
-                                                        National Accounts (SNA)
-                                                        de 2008, da Organização
-                                                        das Nações Unidas (ONU),
-                                                        que inclui, entre outras
-                                                        mudanças metodológicas,
-                                                        a nova classificação de
-                                                        produtos e atividades
-                                                        integrada com a
-                                                        Classificação Nacional
-                                                        de Atividades Econômicas
-                                                        - CNAE 2.0.</p>
+                                                        <strong>Comentário: </strong>
+                                                        {this.state.statistic.description}
+                                                    </p>
                                                 </Grid.Row>
                                                 <Grid.Row>
                                                     <p>
                                                         <strong>Fonte:</strong>&nbsp;
-                                                        <a href="http://www.ipeadata.gov.br/ExibeSerie.aspx?serid=38415"> IPEA</a>
+                                                        <a href={this.state.statistic.source}>IPEA</a>
                                                     </p>
                                                 </Grid.Row>
                                                 <Grid.Row>
-                                                    <p><strong>Dados
-                                                        brutos:</strong>&nbsp;
-                                                        <a href="https://s3.amazonaws.com/brasil-em-dados/economia/PIB-nominal.csv">https://s3.amazonaws.com/brasil-em-dados/economia/PIB-nominal.csv</a>
+                                                    <p><strong>Download:</strong>&nbsp;
+                                                        <a href={this.state.statistic.dataURL}>Clique aqui</a>
                                                     </p>
                                                 </Grid.Row>
                                             </div>

@@ -12,18 +12,20 @@ const categories: CategoryCreateInput[] = [
           title: 'Produto Interno Bruto (PIB) nominal',
           shortTitle: 'PIB',
           slug: 'pib',
-          dataURL: '',
-          description: '',
-          xLabel: '',
-          yLabel: '',
-          xHeader: '',
-          yHeader: '',
-          source: ''
+          dataAvailable: true,
+          dataURL: 'https://s3.amazonaws.com/brasil-em-dados/economia/PIB-nominal.csv',
+          description: ' Produto Interno Bruto (PIB) em valores correntes. As informações sobre as séries do Sistema de Contas Nacionais - referência 2010 estão em conformidade com o novo manual System of National Accounts (SNA) de 2008, da Organização das Nações Unidas (ONU), que inclui, entre outras mudanças metodológicas, a nova classificação de produtos e atividades integrada com a Classificação Nacional de Atividades Econômicas - CNAE 2.0.',
+          xLabel: 'Tempo (Ano/Trimestre)',
+          yLabel: 'Produto Interno Bruto (R$ milhões)',
+          xHeader: 'Data',
+          yHeader: 'PIB nominal - R$ (milhões)',
+          source: 'http://www.ipeadata.gov.br/ExibeSerie.aspx?serid=38415'
         },
         {
           title: 'Renda per capta',
           shortTitle: 'Renda per capta',
           slug: 'renda-per-capta',
+          dataAvailable: false,
           dataURL: '',
           description: '',
           xLabel: '',
@@ -36,6 +38,7 @@ const categories: CategoryCreateInput[] = [
           title: 'Risco de investimento',
           shortTitle: 'Risco de investimento',
           slug: 'risco-de-investimento',
+          dataAvailable: false,
           dataURL: '',
           description: '',
           xLabel: '',
@@ -48,6 +51,7 @@ const categories: CategoryCreateInput[] = [
           title: 'Inflação',
           shortTitle: 'Inflação',
           slug: 'inflacao',
+          dataAvailable: false,
           dataURL: '',
           description: '',
           xLabel: '',
@@ -60,6 +64,7 @@ const categories: CategoryCreateInput[] = [
           title: 'Dívida pública',
           shortTitle: 'Dívida pública',
           slug: 'divida-publica',
+          dataAvailable: false,
           dataURL: '',
           description: '',
           xLabel: '',
@@ -73,6 +78,7 @@ const categories: CategoryCreateInput[] = [
           shortTitle: 'Dívida externa',
           slug: 'divida-externa',
           dataURL: '',
+          dataAvailable: false,
           description: '',
           xLabel: '',
           yLabel: '',
@@ -85,6 +91,7 @@ const categories: CategoryCreateInput[] = [
           shortTitle: 'Taxa de Desemprego',
           slug: 'taxa-de-desemprego',
           dataURL: '',
+          dataAvailable: false,
           description: '',
           xLabel: '',
           yLabel: '',
@@ -106,6 +113,7 @@ const categories: CategoryCreateInput[] = [
           shortTitle: 'Homicídios per capta',
           slug: 'homicidios',
           dataURL: '',
+          dataAvailable: false,
           description: '',
           xLabel: '',
           yLabel: '',
@@ -127,6 +135,7 @@ const categories: CategoryCreateInput[] = [
           shortTitle: 'Escolaridade',
           slug: 'escolaridade',
           dataURL: '',
+          dataAvailable: false,
           description: '',
           xLabel: '',
           yLabel: '',
@@ -139,6 +148,7 @@ const categories: CategoryCreateInput[] = [
           shortTitle: 'Alfabetização',
           slug: 'alfabetizacao',
           dataURL: '',
+          dataAvailable: false,
           description: '',
           xLabel: '',
           yLabel: '',
@@ -153,6 +163,7 @@ const categories: CategoryCreateInput[] = [
           dataURL: '',
           description: '',
           xLabel: '',
+          dataAvailable: false,
           yLabel: '',
           xHeader: '',
           yHeader: '',
@@ -175,6 +186,7 @@ const categories: CategoryCreateInput[] = [
           description: '',
           xLabel: '',
           yLabel: '',
+          dataAvailable: false,
           xHeader: '',
           yHeader: '',
           source: ''
@@ -186,6 +198,7 @@ const categories: CategoryCreateInput[] = [
           dataURL: '',
           description: '',
           xLabel: '',
+          dataAvailable: false,
           yLabel: '',
           xHeader: '',
           yHeader: '',
@@ -197,6 +210,7 @@ const categories: CategoryCreateInput[] = [
           slug: 'casas-saneamento-básico',
           dataURL: '',
           description: '',
+          dataAvailable: false,
           xLabel: '',
           yLabel: '',
           xHeader: '',
@@ -210,6 +224,7 @@ const categories: CategoryCreateInput[] = [
           dataURL: '',
           description: '',
           xLabel: '',
+          dataAvailable: false,
           yLabel: '',
           xHeader: '',
           yHeader: '',
@@ -232,6 +247,7 @@ const categories: CategoryCreateInput[] = [
           description: '',
           xLabel: '',
           yLabel: '',
+          dataAvailable: false,
           xHeader: '',
           yHeader: '',
           source: ''
@@ -250,6 +266,7 @@ const categories: CategoryCreateInput[] = [
           shortTitle: 'IDH',
           slug: 'idh',
           dataURL: '',
+          dataAvailable: false,
           description: '',
           xLabel: '',
           yLabel: '',
@@ -266,6 +283,7 @@ const categories: CategoryCreateInput[] = [
           xLabel: '',
           yLabel: '',
           xHeader: '',
+          dataAvailable: false,
           yHeader: '',
           source: ''
         }
@@ -277,7 +295,9 @@ const categories: CategoryCreateInput[] = [
 const main = async () => {
   for (const category of categories) {
     await repository.createCategory(category)
+    console.log('CREATED ', category.title)
   }
+  process.exit()
 }
 
 main()

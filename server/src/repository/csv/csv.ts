@@ -7,7 +7,8 @@ export interface IPointsInput {
 
 export interface IPointNode {
   xValue: string,
-  yValue: string
+  yValue: string,
+  government: string
 }
 
 export class CSVRepository {
@@ -17,7 +18,8 @@ export class CSVRepository {
     const rows = await getCSV(statistic.dataURL) as object[]
     return rows.map((row) => ({
       xValue: row[statistic.xHeader],
-      yValue: row[statistic.yHeader]
+      yValue: row[statistic.yHeader],
+      government: row['Governo']
     }))
   }
 }

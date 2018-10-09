@@ -11,10 +11,9 @@ export class TransparentError extends Error {
 }
 
 export const isTransparent = (error: any): error is TransparentError =>
-  error.type === 'TransparentError'
+  error && error.type === 'TransparentError'
 
 export const formatError = (error: GraphQLError) => {
-  console.log('error', error)
   return {
     ...error,
     code: isTransparent(error.originalError) ?

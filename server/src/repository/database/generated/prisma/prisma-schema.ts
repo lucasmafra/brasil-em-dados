@@ -214,6 +214,7 @@ type Statistic {
   shortTitle: String!
   title: String!
   description: String!
+  dataAvailable: Boolean!
   xLabel: String!
   yLabel: String!
   xHeader: String!
@@ -234,6 +235,7 @@ input StatisticCreateInput {
   shortTitle: String!
   title: String!
   description: String!
+  dataAvailable: Boolean!
   xLabel: String!
   yLabel: String!
   xHeader: String!
@@ -253,6 +255,7 @@ input StatisticCreateWithoutCategoryInput {
   shortTitle: String!
   title: String!
   description: String!
+  dataAvailable: Boolean!
   xLabel: String!
   yLabel: String!
   xHeader: String!
@@ -275,6 +278,8 @@ enum StatisticOrderByInput {
   title_DESC
   description_ASC
   description_DESC
+  dataAvailable_ASC
+  dataAvailable_DESC
   xLabel_ASC
   xLabel_DESC
   yLabel_ASC
@@ -300,6 +305,7 @@ type StatisticPreviousValues {
   shortTitle: String!
   title: String!
   description: String!
+  dataAvailable: Boolean!
   xLabel: String!
   yLabel: String!
   xHeader: String!
@@ -331,6 +337,7 @@ input StatisticUpdateInput {
   shortTitle: String
   title: String
   description: String
+  dataAvailable: Boolean
   xLabel: String
   yLabel: String
   xHeader: String
@@ -354,6 +361,7 @@ input StatisticUpdateWithoutCategoryDataInput {
   shortTitle: String
   title: String
   description: String
+  dataAvailable: Boolean
   xLabel: String
   yLabel: String
   xHeader: String
@@ -430,6 +438,8 @@ input StatisticWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  dataAvailable: Boolean
+  dataAvailable_not: Boolean
   xLabel: String
   xLabel_not: String
   xLabel_in: [String!]

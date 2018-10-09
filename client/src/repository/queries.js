@@ -12,3 +12,21 @@ export const CATEGORIES = gql`
         }
     }
 `
+
+export const STATISTIC = gql`
+    query Statistic($slug: String!) {
+        statistic(slug: $slug) {
+            title
+            shortTitle
+            slug
+            points {
+                xValue
+                yValue
+                government
+            }
+            source
+            dataURL
+            description
+        }
+    }
+`

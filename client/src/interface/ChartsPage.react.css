@@ -1,3 +1,10 @@
 .statistic-comment {
     text-align: justify;
 }
+
+.c3-region-0 {
+    fill: red;
+}
+.c3-region.foo {
+    fill: green;
+}

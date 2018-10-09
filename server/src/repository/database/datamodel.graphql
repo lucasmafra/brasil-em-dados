@@ -3,6 +3,7 @@ type Statistic {
     shortTitle: String!
     title: String!
     description: String!
+    dataAvailable: Boolean!
     xLabel: String!
     yLabel: String!
     xHeader: String!
