@@ -1,15 +1,30 @@
-# Build
+# Server
+
+## Build
 server/dist
 
-# Dependencies
+## Dependencies
 server/node_modules
 
-# Yarn
+## Yarn
 server/yarn-error.log
 
-# env
+## env
 server/.env
 
-### Intellij ###
+#################################
+# Client
+
+## Dependencies
+client/node_modules
+
+## Yarn
+client/yarn-error.log
+
+## env
+client/.env
+
+#################################
+# Intellij
 .idea
 
