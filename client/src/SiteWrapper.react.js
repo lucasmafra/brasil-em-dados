@@ -3,7 +3,7 @@
 import * as React from "react";
 import {NavLink, withRouter} from "react-router-dom";
 import './SiteWrapper.react.css'
-import {Site, Nav, Grid, List, Button} from "tabler-react";
+import { Site } from "tabler-react";
 
 type Props = {|
     +children: React.Node,
