@@ -11,3 +11,7 @@
 .d-flex.order-lg-2.ml-auto {
     margin-left: 0 !important;
 }
+
+.footer .container .col.col-12.col-lg-auto.mt-3.mt-lg-0.text-center {
+    flex-grow: 1;
+}
