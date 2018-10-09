@@ -31,37 +31,37 @@ const navBarItems: Array<navItem> = [
         subItems: [
             {
                 value: "PIB",
-                to: "/pib-nominal",
+                to: { pathname: "/economia/pib-nominal", state: { title: 'PIB' } },
                 LinkComponent: withRouter(NavLink),
             },
             {
                 value: "Renda per capta",
-                to: "/renda-per-capta",
+                to: { pathname: "/economia/renda-per-capta", state:{ title: 'Renda per capta' } },
                 LinkComponent: withRouter(NavLink),
             },
             {
                 value: "Risco de investimento",
-                to: "/risco-de-investimento",
+                to: "/economia/risco-de-investimento",
                 LinkComponent: withRouter(NavLink),
             },
             {
                 value: "Inflação",
-                to: "/inflacao",
+                to: "/economia/inflacao",
                 LinkComponent: withRouter(NavLink),
             },
             {
                 value: "Dívida pública",
-                to: "/divida-publica",
+                to: "/economia/divida-publica",
                 LinkComponent: withRouter(NavLink),
             },
             {
                 value: "Dívida externa",
-                to: "/dívida-externa",
+                to: "/economia/dívida-externa",
                 LinkComponent: withRouter(NavLink),
             },
             {
                 value: "Taxa de Desemprego",
-                to: "/taxa-desemprego",
+                to: "/economia/taxa-desemprego",
                 LinkComponent: withRouter(NavLink),
             },
         ],
@@ -71,7 +71,7 @@ const navBarItems: Array<navItem> = [
         subItems: [
             {
                 value: "Homicídios per capta",
-                to: "/homicidios-per-capta",
+                to: "/seguranca/homicidios-per-capta",
                 LinkComponent: withRouter(NavLink),
             },
         ],
@@ -127,7 +127,7 @@ class SiteWrapper extends React.Component<Props, void> {
                 headerProps={{
                     href: "/",
                     alt: "Brasil em Dados",
-                    imageURL: "./logo.png",
+                    imageURL: "/logo.png",
                     navItems: (
                         <div className="d-none d-md-flex navbar-statement">
                             Dados do país antes e depois dos governos do PT

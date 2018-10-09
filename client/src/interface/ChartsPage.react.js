@@ -8,10 +8,23 @@ import './ChartsPage.react.css'
 
 class ChartsPage extends React.Component {
     state = {
-        fetchingData: true
+        fetchingData: true,
+        statistic: undefined,
+        title: ''
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.match.params.category !== this.props.match.params.category || prevProps.match.params.statistic !== this.props.match.params.statistic) {
+            this.onRouteChange()
+        }
     }
 
     componentDidMount = () => {
+        this.onRouteChange()
+    }
+
+    onRouteChange = () => {
+        this.setState({ fetchingData: true, title: this.props.location.state && this.props.location.state.title, statistic: undefined })
         setTimeout(() => {
             this.setState({fetchingData: false})
         }, 1000)
@@ -54,7 +67,7 @@ class ChartsPage extends React.Component {
                 <Page.Content>
                     <Grid.Row>
                         <Grid.Col xl={8} lg={8}>
-                            <Card title={chart.title}>
+                            <Card title={this.state.statistic ? this.state.statistic.title : this.state.title }>
                                 <Card.Body>
                                     {
                                         this.state.fetchingData && (
