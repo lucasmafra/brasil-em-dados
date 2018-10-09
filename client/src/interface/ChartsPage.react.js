@@ -63,7 +63,7 @@ class ChartsPage extends React.Component {
         }
 
         return (
-            <SiteWrapper>
+            <SiteWrapper categories={this.props.categories}>
                 <Page.Content>
                     <Grid.Row>
                         <Grid.Col xl={8} lg={8}>

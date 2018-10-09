@@ -7,6 +7,7 @@ import { Site } from "tabler-react";
 
 type Props = {|
     +children: React.Node,
+    +categories: any[]
 |};
 
 type subNavItem = {|
@@ -25,103 +26,16 @@ type navItem = {|
     +subItems?: Array<subNavItem>,
 |};
 
-const navBarItems: Array<navItem> = [
-    {
-        value: "Economia",
-        subItems: [
-            {
-                value: "PIB",
-                to: { pathname: "/economia/pib-nominal", state: { title: 'PIB' } },
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Renda per capta",
-                to: { pathname: "/economia/renda-per-capta", state:{ title: 'Renda per capta' } },
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Risco de investimento",
-                to: "/economia/risco-de-investimento",
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Inflação",
-                to: "/economia/inflacao",
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Dívida pública",
-                to: "/economia/divida-publica",
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Dívida externa",
-                to: "/economia/dívida-externa",
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Taxa de Desemprego",
-                to: "/economia/taxa-desemprego",
-                LinkComponent: withRouter(NavLink),
-            },
-        ],
-    },
-    {
-        value: "Segurança Pública",
-        subItems: [
-            {
-                value: "Homicídios per capta",
-                to: "/seguranca/homicidios-per-capta",
-                LinkComponent: withRouter(NavLink),
-            },
-        ],
-    },
-    {
-        value: "Educação",
-        subItems: [
-            {
-                value: "Escolaridade",
-                to: "/escolaridade",
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Alfabetização",
-                to: "/alfabetizacao",
-                LinkComponent: withRouter(NavLink),
-            },
-            {
-                value: "Distorção de idade/série",
-                to: "/distorcao-idade-serie",
-                LinkComponent: withRouter(NavLink),
-            },
-        ],
-    },
-    {
-        value: "Moradia",
-        subItems: [
-            {value: "Brasileiros sem teto", to: "/sem-teto", LinkComponent: withRouter(NavLink)},
-            {value: "Brasiliros sem terra", to: "/sem-terra", LinkComponent: withRouter(NavLink)},
-            {value: "Casas com saneamento básico", to: "/saneamento-basico", LinkComponent: withRouter(NavLink)},
-            {value: "Energia Elétrica", to: "/energia-eletrica", LinkComponent: withRouter(NavLink)},
-        ],
-    },
-    {
-        value: "Corrupção",
-        subItems: [
-            {value: "Índice de percepção da corrupção", to: "/indice-percepcao-corrupcao", LinkComponent: withRouter(NavLink)},
-        ],
-    },
-    {
-        value: "Social",
-        subItems: [
-            {value: "IDH", to: "/idh", LinkComponent: withRouter(NavLink)},
-            {value: "Índice de Gini", to: "/indice-gini", LinkComponent: withRouter(NavLink)},
-        ],
-    },
-];
-
 class SiteWrapper extends React.Component<Props, void> {
     render(): React.Node {
+        const navBarItems: Array<navItem> = this.props.categories.map((category) => ({
+            value: category.title,
+            subItems: category.statistics.map((statistic) => ({
+                value: statistic.shortTitle,
+                to: { pathname: `/${category.slug}/${statistic.slug}`, state: { title: statistic.shortTitle }},
+                LinkComponent: withRouter(NavLink)
+            })),
+        }))
         return (
             <Site.Wrapper
                 headerProps={{
